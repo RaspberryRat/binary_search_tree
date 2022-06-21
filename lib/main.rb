@@ -44,6 +44,18 @@ class Tree #should have a root attribute which takes from return value
     return search(value, root.left)
   end
 
+  def find(value, root = @root)
+    begin
+      root.data
+    rescue NoMethodError
+      return "Value: '#{value}' is not in the binary tree"
+    else
+      return root if root.data == value
+
+      return find(value, root.right) if root.data < value
+      return find(value, root.left)
+    end
+  end
 
   def delete(value)
 
@@ -63,4 +75,5 @@ tree = Tree.new(arr2)
 
 tree.pretty_print
 
+puts tree.find(10)
  
