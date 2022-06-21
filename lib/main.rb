@@ -33,27 +33,30 @@ class Tree #should have a root attribute which takes from return value
   end
 
   def insert(value)
-    # will need to travel down tree and find location where it fits, then redirect each node from before to this value, and redirect node after to next value
-    
+    return "Value already in tree" unless find(value).nil?
+
+    previous_node = last_node(value)
+
+    previous_node.left = Node.new(value)
   end
 
-  def search(value, root = @root)
-    return root if root.data == value
+  def last_node(value, node = @root, prev_node = node)
+    return prev_node if node.nil?
 
-    return search(value, root.right) if root.data < value
-    return search(value, root.left)
+    return last_node(value, node.right, prev_node = node) if node.data < value
+    last_node(value, node.left, prev_node = node)
   end
 
-  def find(value, root = @root)
+  def find(value, node = @root)
     begin
-      root.data
+      node.data
     rescue NoMethodError
-      return "Value: '#{value}' is not in the binary tree"
+      return nil
     else
-      return root if root.data == value
+      return node if node.data == value
 
-      return find(value, root.right) if root.data < value
-      return find(value, root.left)
+      return find(value, node.right) if node.data < value
+      return find(value, node.left)
     end
   end
 
@@ -70,10 +73,28 @@ end
 
 arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 arr2 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+arr3 = []
+arr4 = []
 
-tree = Tree.new(arr2)
+i = 1
+13.times do
+  arr3 << i
+  i += 1
+end
+
+i = 1
+13.times do
+  arr4 << i unless i.even?
+  i += 1
+end
+
+tree = Tree.new(arr4)
 
 tree.pretty_print
 
-puts tree.find(10)
+tree.insert(2)
+
+tree.pretty_print
+
+
  
