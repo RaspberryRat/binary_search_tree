@@ -166,15 +166,15 @@ class Tree #should have a root attribute which takes from return value
     end
   end
 
-  # accepts a block, method should traverse in breadth first level order and yield each node to provided block, either iteration or recursion
+  # accepts a block, method should traverse in breadth first lqueuevel order and yield each node to provided block, either iteration or recursion
   def level_order(queue = [@root], &block)
     return if queue.length.zero?
 
     node = queue.shift
     yield(node)
-    queue << node.left unless node.nil?
-    queue << node.right unless node.nil?
-    level_order(queue.compact, &block)
+    queue << node.left unless node.left.nil?
+    queue << node.right unless node.right.nil?
+    level_order(queue, &block)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
