@@ -42,12 +42,11 @@ class Tree #should have a root attribute which takes from return value
   end
 
   def delete(value)
-    binding.pry
     return "Value '#{value}' not in tree" if find(value).nil?
 
     # returns 0 if a leaf, returns 2, if node has two childs, else returns node
     node = number_of_childs(value)
-    if node.zero?
+    if node == 0
       delete_leaf(value)
     elsif node != 2
       parent = find_parent(value)
@@ -57,7 +56,7 @@ class Tree #should have a root attribute which takes from return value
     else
       moved_node = find_new_parent(find(value).right)
       update_child_node(moved_node, find(value))
-      return @root = moved_node if @root.data = value
+      return @root = moved_node if @root.data == value
       parent = find_parent(value)
       parent.left = moved_node if parent.data > moved_node.data
       parent.right = moved_node if parent.data < moved_node.data
@@ -66,12 +65,9 @@ class Tree #should have a root attribute which takes from return value
 
   # used with #delete when node has two childs, updates parents to new childs
   def update_child_node(new_node, old_node)
-    binding.pry
-   
 
     new_node.left = old_node.left
-     # if new_node @ right != nil, find end of tree where @right == nil, then set that parent to new_node @ right,
-    #check new_node@right for nil
+    #TODO CLEAN UP CODE
     right_value = last_node_right(new_node)
     unless right_value == new_node
       right_value.right = old_node.right
@@ -93,7 +89,7 @@ class Tree #should have a root attribute which takes from return value
   def remove_parent(node)
     former_parent = find_parent(node.data)
     return former_parent.left = nil if former_parent.left == node 
-    former_parent.right = nil
+    former_parent.right = nil if former_parent.left == node
   end
 
   # finds new parent node if #delete node has two childs
@@ -215,7 +211,7 @@ puts "\n\n"
 
 tree2.pretty_print
 puts "\n\n"
-tree2.delete(50)
+tree2.delete(65)
 tree2.pretty_print
 puts "\n\n"
 
