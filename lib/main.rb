@@ -42,7 +42,7 @@ class Tree #should have a root attribute which takes from return value
   end
 
   def delete(value)
-    # determine how childs of node
+    binding.pry
     return "Value '#{value}' not in tree" if find(value).nil?
 
     # returns 0 if a leaf, returns 2, if node has two childs, else returns node
@@ -57,18 +57,44 @@ class Tree #should have a root attribute which takes from return value
     else
       moved_node = find_new_parent(find(value).right)
       update_child_node(moved_node, find(value))
+      return @root = moved_node if @root.data = value
       parent = find_parent(value)
       parent.left = moved_node if parent.data > moved_node.data
       parent.right = moved_node if parent.data < moved_node.data
     end
   end
 
-  def update_child_node(node, parent)
-    node.left = parent.left
-    right_value = parent.right
-    node.right = right_value unless right_value.data == node.data
+  # used with #delete when node has two childs, updates parents to new childs
+  def update_child_node(new_node, old_node)
+    binding.pry
+   
+
+    new_node.left = old_node.left
+     # if new_node @ right != nil, find end of tree where @right == nil, then set that parent to new_node @ right,
+    #check new_node@right for nil
+    right_value = last_node_right(new_node)
+    unless right_value == new_node
+      right_value.right = old_node.right
+    else
+      right_value = old_node.right
+      new_node.right = old_node.right unless right_value.data == new_node.data
+    end
+    remove_parent(new_node)
   end
 
+  # finds leaf node on right, for #delete with two childs, needed when replacement node of node deleted has a right child
+  def last_node_right(node)
+    return node if node.right.nil?
+
+    last_node_right(node.right)
+  end
+
+  # removes previous parent connection when node deleted with 2 childs
+  def remove_parent(node)
+    former_parent = find_parent(node.data)
+    return former_parent.left = nil if former_parent.left == node 
+    former_parent.right = nil
+  end
 
   # finds new parent node if #delete node has two childs
   def find_new_parent(node)
@@ -155,6 +181,7 @@ arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 arr2 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 arr3 = []
 arr4 = []
+arr5 = [50, 30, 20, 40, 32, 34, 36, 70, 60, 65, 75, 80, 85]
 
 i = 1
 13.times do
@@ -178,9 +205,19 @@ tree.insert(4)
 tree.pretty_print
 puts "\n\n"
 
-x = 2
-puts "delete value '#{x}'"
-tree.delete(x)
-tree.pretty_print
+# x = 2
+# puts "delete value '#{x}'"
+# tree.delete(x)
+# tree.pretty_print
+
+tree2 = Tree.new(arr5)
+puts "\n\n"
+
+tree2.pretty_print
+puts "\n\n"
+tree2.delete(50)
+tree2.pretty_print
+puts "\n\n"
+
 
 
