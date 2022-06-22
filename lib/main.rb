@@ -42,20 +42,28 @@ class Tree #should have a root attribute which takes from return value
   end
 
   def delete(value)
-    binding.pry
+    # TODO working here. How to shift up trees if delete with both @left and @right. Ie delete 3
     return "Value '#{value}' not in tree" if find(value).nil?
     # need to fix this it is wrong
     previous_node = find_for_delete(value)
+    # find next node
+    next_node_left = find(value).left
+    next_node_right = find(value).right
     binding.pry
+
+
+    puts previous_node.left.data unless previous_node.left.nil?
+    puts previous_node.right.data unless previous_node.right.nil?
 
     # if value node has @left and @ right, set to previous node, if they are nil, remove link
   end
 
+  # finds previous node for #delete
   def find_for_delete(value, node = @root, prev_node = node)
     return prev_node if node.data == value
 
-    return last_node(value, node.right, prev_node = node) if node.data < value
-    last_node(value, node.left, prev_node = node)
+    return find_for_delete(value, node.right, prev_node = node) if node.data < value
+    find_for_delete(value, node.left, prev_node = node)
   end
 
   # finds the last_node before a nil to use with #insert and #delete
@@ -110,6 +118,8 @@ tree.pretty_print
 tree.insert(2)
 tree.insert(4)
 tree.insert(14)
-binding.pry
+
 tree.pretty_print
+
+puts tree.delete(3)
 
