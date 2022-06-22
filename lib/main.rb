@@ -157,13 +157,24 @@ class Tree #should have a root attribute which takes from return value
     begin
       node.data
     rescue NoMethodError
-      return nil
+      nil
     else
       return node if node.data == value
 
       return find(value, node.right) if node.data < value
       return find(value, node.left)
     end
+  end
+
+  # accepts a block, method should traverse in breadth first level order and yield each node to provided block, either iteration or recursion
+  def level_order(queue = [@root], &block)
+    return if queue.length.zero?
+
+    node = queue.shift
+    yield(node)
+    queue << node.left unless node.nil?
+    queue << node.right unless node.nil?
+    level_order(queue.compact, &block)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -195,8 +206,8 @@ tree = Tree.new(arr2)
 
 puts "\n\n"
 
-tree.insert(2)
-tree.insert(4)
+# tree.insert(2)
+# tree.insert(4)
 
 tree.pretty_print
 puts "\n\n"
@@ -206,14 +217,16 @@ puts "\n\n"
 # tree.delete(x)
 # tree.pretty_print
 
-tree2 = Tree.new(arr5)
-puts "\n\n"
+# tree2 = Tree.new(arr5)
+# puts "\n\n"
 
-tree2.pretty_print
+# tree2.pretty_print
 puts "\n\n"
-tree2.delete(65)
-tree2.pretty_print
-puts "\n\n"
+tree.level_order { |node| print "#{node.data}, "}
+# puts "\n\n"
+# tree2.delete(65)
+# tree2.pretty_print
+# puts "\n\n"
 
 
 
