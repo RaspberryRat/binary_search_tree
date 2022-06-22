@@ -33,13 +33,32 @@ class Tree #should have a root attribute which takes from return value
   end
 
   def insert(value)
-    return "Value already in tree" unless find(value).nil?
+    return "Value '#{value}' already in tree" unless find(value).nil?
 
     previous_node = last_node(value)
 
-    previous_node.left = Node.new(value)
+    return previous_node.left = Node.new(value) if value < previous_node.data
+    previous_node.right = Node.new(value)
   end
 
+  def delete(value)
+    binding.pry
+    return "Value '#{value}' not in tree" if find(value).nil?
+    # need to fix this it is wrong
+    previous_node = find_for_delete(value)
+    binding.pry
+
+    # if value node has @left and @ right, set to previous node, if they are nil, remove link
+  end
+
+  def find_for_delete(value, node = @root, prev_node = node)
+    return prev_node if node.data == value
+
+    return last_node(value, node.right, prev_node = node) if node.data < value
+    last_node(value, node.left, prev_node = node)
+  end
+
+  # finds the last_node before a nil to use with #insert and #delete
   def last_node(value, node = @root, prev_node = node)
     return prev_node if node.nil?
 
@@ -58,10 +77,6 @@ class Tree #should have a root attribute which takes from return value
       return find(value, node.right) if node.data < value
       return find(value, node.left)
     end
-  end
-
-  def delete(value)
-
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -93,8 +108,8 @@ tree = Tree.new(arr4)
 tree.pretty_print
 
 tree.insert(2)
-
+tree.insert(4)
+tree.insert(14)
+binding.pry
 tree.pretty_print
 
-
- 
