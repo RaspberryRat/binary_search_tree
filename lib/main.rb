@@ -171,10 +171,27 @@ class Tree #should have a root attribute which takes from return value
     return if queue.length.zero?
 
     node = queue.shift
-    yield(node)
+    yield(node) if block_given?
     queue << node.left unless node.left.nil?
     queue << node.right unless node.right.nil?
     level_order(queue, &block)
+  end
+
+  def preorder(node = @root, arr = [], &block)
+    return arr if node.nil?
+
+    arr << node
+    yield(node) if block_given?
+    preorder(node.left, arr, &block)
+    preorder(node.right, arr, &block)
+  end
+
+  def inorder
+
+  end
+
+  def postorder
+
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -223,6 +240,9 @@ puts "\n\n"
 # tree2.pretty_print
 puts "\n\n"
 tree.level_order { |node| print "#{node.data}, "}
+puts "\n\n"
+tree.preorder { |node| print "#{node.data}, "}
+print tree.preorder
 # puts "\n\n"
 # tree2.delete(65)
 # tree2.pretty_print
