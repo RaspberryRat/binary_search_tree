@@ -45,14 +45,39 @@ class Tree #should have a root attribute which takes from return value
     # determine how childs of node
     return "Value '#{value}' not in tree" if find(value).nil?
 
-    number = number_of_childs(value)
-
-    if number == 0
-      delete_leaf(value)
+    # returns 0 if a leaf, returns 2, if node has two childs, else returns node
+    node = number_of_childs(value)
+    if node == 0
+      return delete_leaf(value)
+    elsif node != 2
+      parent = find_parent(value)
+      return parent.left = node if parent.data > node.data
+      return parent.right = node
+    else
+      parent = find_new_parent(value)
     end
-    
+      
+  end
 
-  
+  # finds new parent node if #delete node has two childs
+  def find_new_parent(value, node = @root)
+    # if node.data == value
+    # go to node.@right, then go node@ left until node.left == nil, return node, as new parent
+# todo working here
+    node = find(value)
+
+
+
+
+
+  end
+
+  # finds parent node if #delete node has 1 child
+  def find_parent(value, node = @root)
+    return node if value == node.left.data || value == node.right.data
+
+    return find_parent(value, node.right) if value > node.data
+    return find_parent(value, node.left)
   end
 
   def delete_leaf(value, node = @root, prev_node = node)
@@ -148,7 +173,7 @@ tree.insert(4)
 tree.pretty_print
 puts "\n\n"
 
-x = 9
+x = 8
 puts "delete value '#{x}'"
 tree.delete(x)
 tree.pretty_print
