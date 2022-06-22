@@ -42,20 +42,47 @@ class Tree #should have a root attribute which takes from return value
   end
 
   def delete(value)
-    # TODO working here. How to shift up trees if delete with both @left and @right. Ie delete 3
+    # determine how childs of node
     return "Value '#{value}' not in tree" if find(value).nil?
-    # need to fix this it is wrong
-    previous_node = find_for_delete(value)
-    # find next node
-    next_node_left = find(value).left
-    next_node_right = find(value).right
-    binding.pry
+
+    number = number_of_childs(value)
+
+    if number == 0
+      delete_leaf(value)
+    end
+    
+
+  
+  end
+
+  def delete_leaf(value, node = @root, prev_node = node)
+    if node.data == value
+      return prev_node.right = nil if value > prev_node.data
+      return prev_node.left = nil
+    end
+
+    return delete_leaf(value, node.right, prev_node = node) if value > node.data
+    return delete_leaf(value, node.left, prev_node = node)
+  end
 
 
-    puts previous_node.left.data unless previous_node.left.nil?
-    puts previous_node.right.data unless previous_node.right.nil?
+  # determine number of childs of a value, for #delete method
+  def number_of_childs(value, node = @root)
+    if node.data == value
+      if node.left.nil? && node.right.nil?
+        return 0
+      elsif node.left.nil? && node.right
+        return node.right
+      elsif node.right.nil? && node.left
+        return node.left
+      else
+        return 2
+      end
+    end
 
-    # if value node has @left and @ right, set to previous node, if they are nil, remove link
+    return number_of_childs(value, node.right) if node.data < value
+    return number_of_childs(value, node.left)
+
   end
 
   # finds previous node for #delete
@@ -111,15 +138,19 @@ i = 1
   i += 1
 end
 
-tree = Tree.new(arr4)
+tree = Tree.new(arr2)
 
-tree.pretty_print
+puts "\n\n"
 
 tree.insert(2)
 tree.insert(4)
-tree.insert(14)
 
 tree.pretty_print
+puts "\n\n"
 
-puts tree.delete(3)
+x = 9
+puts "delete value '#{x}'"
+tree.delete(x)
+tree.pretty_print
+
 
