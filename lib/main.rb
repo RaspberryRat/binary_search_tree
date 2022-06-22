@@ -47,29 +47,34 @@ class Tree #should have a root attribute which takes from return value
 
     # returns 0 if a leaf, returns 2, if node has two childs, else returns node
     node = number_of_childs(value)
-    if node == 0
-      return delete_leaf(value)
+    if node.zero?
+      delete_leaf(value)
     elsif node != 2
       parent = find_parent(value)
       return parent.left = node if parent.data > node.data
-      return parent.right = node
+
+      parent.right = node
     else
-      parent = find_new_parent(value)
+      moved_node = find_new_parent(find(value).right)
+      update_child_node(moved_node, find(value))
+      parent = find_parent(value)
+      parent.left = moved_node if parent.data > moved_node.data
+      parent.right = moved_node if parent.data < moved_node.data
     end
-      
   end
 
+  def update_child_node(node, parent)
+    node.left = parent.left
+    right_value = parent.right
+    node.right = right_value unless right_value.data == node.data
+  end
+
+
   # finds new parent node if #delete node has two childs
-  def find_new_parent(value, node = @root)
-    # if node.data == value
-    # go to node.@right, then go node@ left until node.left == nil, return node, as new parent
-# todo working here
-    node = find(value)
+  def find_new_parent(node)
+    return node if node.left.nil?
 
-
-
-
-
+    find_new_parent(node.left)
   end
 
   # finds parent node if #delete node has 1 child
@@ -173,7 +178,7 @@ tree.insert(4)
 tree.pretty_print
 puts "\n\n"
 
-x = 8
+x = 2
 puts "delete value '#{x}'"
 tree.delete(x)
 tree.pretty_print
