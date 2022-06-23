@@ -193,17 +193,18 @@ class Tree #should have a root attribute which takes from return value
 
   # returns number or nodes between value and a leaf node
   def height(value = @root.data.to_i, node = find(value))
+    return "Value: '#{value}' not in the binary tree" if find(value).nil?
     return if node.nil?
 
     left = height(value, node.left)
     right = height(value, node.right)
+
     left.to_i > right.to_i ? left.to_i + 1 : right.to_i + 1
   end
 
   # returns depth of a node
   def depth(value, node = @root, level = 0)
     return "Value: '#{value}' not in the binary tree" if find(value).nil?
-    # start at root, go left or right until find value
     return if node.nil?
 
     return level if node.data == value
@@ -211,9 +212,22 @@ class Tree #should have a root attribute which takes from return value
     return depth(value, node.left, level + 1) if value < node.data
 
     return depth(value, node.right, level + 1) if value > node.data
+  end
 
+  # checks if tree is balanced (no node is greater than 1 level)
+  def balanced?(node = @root)
+    return if node.nil?
+
+    left = balanced?(node.left)
+    right = balanced?(node.right)
+    if left.to_i >= right.to_i + 2 && left.to_i + 2 <= right.to_i
+      "false"
+    else
+      "true"
+    end
 
   end
+
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -281,3 +295,11 @@ depth_value = 9
 print "The depth of #{depth_value} is : #{tree.depth(depth_value)}"
 puts "\n\n"
 
+print tree.balanced?
+puts "\n\n"
+
+tree.insert(10)
+tree.insert(12)
+tree.pretty_print
+puts "\n\n"
+print tree.balanced?
