@@ -234,6 +234,13 @@ class Tree #should have a root attribute which takes from return value
     balance_checker(node.right)
   end
 
+  def rebalance
+    return "Tree is already balanced" if balanced?
+    unbalanced_tree_arr = inorder
+    unbalanced_arr_data = []
+    unbalanced_tree_arr.map { |node| unbalanced_arr_data << node.data}
+    @root = build_tree(unbalanced_arr_data)
+  end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -303,6 +310,9 @@ puts "\n\n"
 
 print "Is the binary tree balanced? #{tree.balanced?}"
 puts "\n\n"
+print tree.rebalance
+puts "\n\n"
+
 
 tree.insert(10)
 tree.insert(90)
@@ -314,3 +324,8 @@ tree.insert(14)
 tree.pretty_print
 puts "\n\n"
 print "Is the binary tree balanced? #{tree.balanced?}"
+puts "\n\n"
+
+tree.rebalance
+puts "\n\n"
+tree.pretty_print
