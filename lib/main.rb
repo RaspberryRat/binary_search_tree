@@ -173,16 +173,15 @@ class Tree #should have a root attribute which takes from return value
 
   # prints left node, root, right node in depth-first traversal
   def inorder(node = @root, arr = [], &block)
-    # TODO working on this method
     # folow left subtree, until @left is nil, if so, pass block
     # then check right subtree of root
     # then return to next root, if @right is nil, pass block on root
-    return node if node.nil?
+    return if node.nil?
 
-    inorder(node.left, arr, &block) unless node.left.nil?
-    arr << node unless node.nil?
+    inorder(node.left, arr, &block)
+    arr << node.data unless node.nil?
     yield(node) if block_given? && !node.nil?
-    inorder(node.right, arr, &block) unless node.right.nil?
+    inorder(node.right, arr, &block)
     arr
   end
   # prints left node, right node, root in depth-first traversal
