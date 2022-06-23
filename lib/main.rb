@@ -20,7 +20,6 @@ class Tree #should have a root attribute which takes from return value
 
     node.left = build_tree(arr, start, mid - 1)
     node.right = build_tree(arr, mid + 1, last)
-    print node.data
     node
   end
 
@@ -234,8 +233,10 @@ class Tree #should have a root attribute which takes from return value
     balance_checker(node.right)
   end
 
+  # rebalances the binary search tree by calling inorder and build tree
   def rebalance
     return "Tree is already balanced" if balanced?
+
     unbalanced_tree_arr = inorder
     unbalanced_arr_data = []
     unbalanced_tree_arr.map { |node| unbalanced_arr_data << node.data}
@@ -249,83 +250,39 @@ class Tree #should have a root attribute which takes from return value
   end
 end
 
-arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-arr2 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-arr3 = []
-arr4 = []
-arr5 = [50, 30, 20, 40, 32, 34, 36, 70, 60, 65, 75, 80, 85]
+array = Array.new(15) { rand(1..100) }
 
-i = 1
-13.times do
-  arr3 << i
-  i += 1
-end
+tree = Tree.new(array)
 
-i = 1
-13.times do
-  arr4 << i unless i.even?
-  i += 1
-end
+puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
 
-tree = Tree.new(arr5)
-
+print "Binary search tree preorder nodes: "
+tree.preorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree inorder nodes: "
+tree.inorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree postorder nodes: "
+tree.postorder { |node| print "#{node.data}, " }
 puts "\n\n"
 
-# tree.insert(2)
-# tree.insert(4)
-
+tree.insert(1323)
+tree.insert(232)
+tree.insert(123)
+tree.insert(3434)
+tree.insert(199)
 tree.pretty_print
-puts "\n\n"
-
-# x = 2
-# puts "delete value '#{x}'"
-# tree.delete(x)
-# tree.pretty_print
-
-# tree2 = Tree.new(arr5)
-# puts "\n\n"
-
-# tree2.pretty_print
-print "\n\nlevel order: "
-tree.level_order { |node| print "#{node.data}, "}
-print "\n\npreorder: "
-tree.preorder { |node| print "#{node.data}, "}
-# puts "\n\n"
-# tree2.delete(65)
-# tree2.pretty_print
-# puts "\n\n"
-print "\n\ninorder: "
-tree.inorder { |node| print "#{node.data}, "}
-
-print "\n\npostorder: "
-tree.postorder { |node| print "#{node.data}, "}
-puts "\n\n"
-height_value = 2
-print "The height of #{height_value} is : #{tree.height(height_value)}"
-puts "\n\n"
-
-depth_value = 9
-print "The depth of #{depth_value} is : #{tree.depth(depth_value)}"
-puts "\n\n"
-
-print "Is the binary tree balanced? #{tree.balanced?}"
-puts "\n\n"
-print tree.rebalance
-puts "\n\n"
-
-
-tree.insert(10)
-tree.insert(90)
-tree.insert(91)
-tree.insert(92)
-tree.insert(13)
-tree.insert(14)
-
-tree.pretty_print
-puts "\n\n"
-print "Is the binary tree balanced? #{tree.balanced?}"
-puts "\n\n"
-
+puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
 tree.rebalance
-puts "\n\n"
 tree.pretty_print
+puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+print "Binary search tree preorder nodes: "
+tree.preorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree inorder nodes: "
+tree.inorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree postorder nodes: "
+tree.postorder { |node| print "#{node.data}, " }
+puts "\n\n"
+
