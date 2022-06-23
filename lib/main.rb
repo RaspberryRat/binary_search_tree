@@ -215,13 +215,23 @@ class Tree #should have a root attribute which takes from return value
   end
 
   # checks if tree is balanced (no node is greater than 1 level)
-  def balanced?(node = @root)
+  def balanced?
+    balance_checker != false
+  end
+
+  # used with #balanced? to return true, otherwise only returns nil or false
+  def balance_checker(node = @root)
+    return if node.nil?
+
     # get height of left tree, and height of right tree
-    left_height = height(node.left.data)
-    right_height = height(node.right.data)
+    left_height = node.left.nil? ? return : height(node.left.data)
+    right_height = node.right.nil? ? return : height(node.right.data)
     difference = left_height - right_height
-    difference *= -1 if difference < 0
-    difference <= 1
+    difference *= -1 if difference.negative?
+    return false if difference > 2
+
+    balance_checker(node.left)
+    balance_checker(node.right)
   end
 
 
@@ -250,7 +260,7 @@ i = 1
   i += 1
 end
 
-tree = Tree.new(arr2)
+tree = Tree.new(arr5)
 
 puts "\n\n"
 
@@ -291,11 +301,16 @@ depth_value = 9
 print "The depth of #{depth_value} is : #{tree.depth(depth_value)}"
 puts "\n\n"
 
-print tree.balanced?
+print "Is the binary tree balanced? #{tree.balanced?}"
 puts "\n\n"
 
 tree.insert(10)
-tree.insert(12)
+tree.insert(90)
+tree.insert(91)
+tree.insert(92)
+tree.insert(13)
+tree.insert(14)
+
 tree.pretty_print
 puts "\n\n"
-print tree.balanced?
+print "Is the binary tree balanced? #{tree.balanced?}"
