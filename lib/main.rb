@@ -57,9 +57,7 @@ class Tree #should have a root attribute which takes from return value
 
   # used with #delete when node has two childs, updates parents to new childs
   def update_child_node(new_node, old_node)
-
     new_node.left = old_node.left
-    #TODO CLEAN UP CODE
     right_value = last_node_right(new_node)
     unless right_value == new_node
       right_value.right = old_node.right
@@ -109,7 +107,6 @@ class Tree #should have a root attribute which takes from return value
     return delete_leaf(value, node.left, prev_node = node)
   end
 
-
   # determine number of childs of a value, for #delete method
   def number_of_childs(value, node = @root)
     if node.data == value
@@ -125,8 +122,8 @@ class Tree #should have a root attribute which takes from return value
     end
 
     return number_of_childs(value, node.right) if node.data < value
-    return number_of_childs(value, node.left)
 
+    number_of_childs(value, node.left)
   end
 
   # finds the last_node before a nil to use with #insert and #delete
@@ -134,6 +131,7 @@ class Tree #should have a root attribute which takes from return value
     return prev_node if node.nil?
 
     return last_node(value, node.right, prev_node = node) if node.data < value
+
     last_node(value, node.left, prev_node = node)
   end
 
@@ -195,12 +193,25 @@ class Tree #should have a root attribute which takes from return value
 
   # returns number or nodes between value and a leaf node
   def height(value = @root.data.to_i, node = find(value))
-
     return if node.nil?
 
     left = height(value, node.left)
     right = height(value, node.right)
     left.to_i > right.to_i ? left.to_i + 1 : right.to_i + 1
+  end
+
+  # returns depth of a node
+  def depth(value, node = @root, level = 0)
+    # start at root, go left or right until find value
+    return if node.nil?
+
+    return level if node.data == value
+
+    return depth(value, node.left, level + 1) if value < node.data
+
+    return depth(value, node.right, level + 1) if value > node.data
+
+
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -261,7 +272,11 @@ tree.inorder { |node| print "#{node.data}, "}
 print "\n\npostorder: "
 tree.postorder { |node| print "#{node.data}, "}
 puts "\n\n"
+height_value = 2
+print "The height of #{height_value} is : #{tree.height(height_value)}"
+puts "\n\n"
 
-print tree.height(8)
+depth_value = 3
+print "The depth of #{depth_value} is : #{tree.depth(depth_value)}"
 puts "\n\n"
 
