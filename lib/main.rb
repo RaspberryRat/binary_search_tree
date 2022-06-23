@@ -1,5 +1,5 @@
 require_relative "./node"
-require "pry-byebug"
+
 # Binary search tree class, creates and navigate a BST
 class Tree
   def initialize(arr)
@@ -159,7 +159,6 @@ class Tree
 
   # prints root, left node, right node in depth-first traversal
   def preorder(node = @root, arr = [], &block)
-    binding.pry
     return arr if node.nil?
 
     arr << node
@@ -250,70 +249,38 @@ class Tree
   end
 end
 
-# array = Array.new(15) { rand(1..100) }
+array = Array.new(15) { rand(1..100) }
 
-# tree = Tree.new(array)
+tree = Tree.new(array)
 
-# puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
 
-# print "Binary search tree preorder nodes: "
-# tree.preorder { |node| print "#{node.data}, " }
-# puts "\n"
-# print "Binary search tree inorder nodes: "
-# tree.inorder { |node| print "#{node.data}, " }
-# puts "\n"
-# print "Binary search tree postorder nodes: "
-# tree.postorder { |node| print "#{node.data}, " }
-# puts "\n\n"
-
-# tree.insert(1323)
-# tree.insert(232)
-# tree.insert(123)
-# tree.insert(3434)
-# tree.insert(199)
-# tree.pretty_print
-# puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
-# tree.rebalance
-# tree.pretty_print
-# puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
-# print "Binary search tree preorder nodes: "
-# tree.preorder { |node| print "#{node.data}, " }
-# puts "\n"
-# print "Binary search tree inorder nodes: "
-# tree.inorder { |node| print "#{node.data}, " }
-# puts "\n"
-# print "Binary search tree postorder nodes: "
-# tree.postorder { |node| print "#{node.data}, " }
-# puts "\n\n"
-
-# arr = []
-# i = 0
-# 10.times do
-#   arr << i
-#   i += 1
-# end
-
-# tree = Tree.new(arr)
-# tree.pretty_print
-# puts "\n\n"
-# tree.insert(11)
-# tree.pretty_print
-# tree.insert(13)
-
-# tree.pretty_print
-# puts "\n\n"
-# tree.pretty_print
-# puts "\n\n"
-# tree.pretty_print
-# puts "\n\n"
-# tree.delete(7)
-# puts "\n\n"
-# tree.pretty_print
-
-tree2 = Tree.new([50, 30, 20, 40, 32, 34, 36, 70, 60, 65, 75, 80, 85])
+print "Binary search tree preorder nodes: "
+tree.preorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree inorder nodes: "
+tree.inorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree postorder nodes: "
+tree.postorder { |node| print "#{node.data}, " }
 puts "\n\n"
-tree2.pretty_print
-tree2.delete(36)
 
+tree.insert(1323)
+tree.insert(232)
+tree.insert(123)
+tree.insert(3434)
+tree.insert(199)
+tree.pretty_print
+puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+tree.rebalance
+tree.pretty_print
+puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+print "Binary search tree preorder nodes: "
+tree.preorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree inorder nodes: "
+tree.inorder { |node| print "#{node.data}, " }
+puts "\n"
+print "Binary search tree postorder nodes: "
+tree.postorder { |node| print "#{node.data}, " }
 puts "\n\n"
-tree2.pretty_print
