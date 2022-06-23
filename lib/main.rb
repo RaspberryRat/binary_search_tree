@@ -129,14 +129,6 @@ class Tree #should have a root attribute which takes from return value
 
   end
 
-  # finds previous node for #delete
-  def find_for_delete(value, node = @root, prev_node = node)
-    return prev_node if node.data == value
-
-    return find_for_delete(value, node.right, prev_node = node) if node.data < value
-    find_for_delete(value, node.left, prev_node = node)
-  end
-
   # finds the last_node before a nil to use with #insert and #delete
   def last_node(value, node = @root, prev_node = node)
     return prev_node if node.nil?
