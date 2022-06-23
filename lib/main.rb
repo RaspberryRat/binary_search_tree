@@ -1,17 +1,9 @@
+require_relative "./node"
 require "pry-byebug"
 
 # don't use duplicate values or check for duplicate values before inserting
 module Comparable
   # TODO compare nodes using data attributes??
-end
-
-class Node
-  def initialize(data)
-    @data = data
-    @left = nil
-    @right = nil
-  end
-  attr_accessor :data, :left, :right
 end
 
 class Tree #should have a root attribute which takes from return value
