@@ -1,5 +1,5 @@
 require_relative "./node"
-
+require "pry-byebug"
 # Binary search tree class, creates and navigate a BST
 class Tree
   def initialize(arr)
@@ -53,12 +53,25 @@ class Tree
     end
   end
 
+   # determine number of childs of a value, for #delete method
+   def number_of_childs(value, node = @root)
+    if node.data == value
+      return 0 if node.left.nil? && node.right.nil?
+      return node.right if node.left.nil?
+      return node.left if node.right.nil?
+
+      return 2
+    end
+    return number_of_childs(value, node.right) if node.data < value
+
+    number_of_childs(value, node.left)
+  end
+
   # used with #delete when node has two childs, updates parents to new childs
   def update_child_node(new_node, old_node)
     new_node.left = old_node.left
-    right_value = last_node_right(new_node)
-    unless right_value == new_node
-      right_value.right = old_node.right
+    if !new_node.right.nil?
+      new_node.right.right = old_node.right
     else
       right_value = old_node.right
       new_node.right = old_node.right unless right_value.data == new_node.data
@@ -108,19 +121,7 @@ class Tree
     delete_leaf(value, node.left, prev_node = node)
   end
 
-  # determine number of childs of a value, for #delete method
-  def number_of_childs(value, node = @root)
-    if node.data == value
-      return 0 if node.left.nil? && node.right.nil?
-      return node.right if node.left.nil? && node.right
-      return node.left if node.right.nil? && node.left
-
-      return 2
-    end
-    return number_of_childs(value, node.right) if node.data < value
-
-    number_of_childs(value, node.left)
-  end
+ 
 
   # finds the last_node before a nil to use with #insert and #delete
   def last_node(value, node = @root, prev_node = node)
@@ -158,6 +159,7 @@ class Tree
 
   # prints root, left node, right node in depth-first traversal
   def preorder(node = @root, arr = [], &block)
+    binding.pry
     return arr if node.nil?
 
     arr << node
@@ -284,15 +286,34 @@ end
 # tree.postorder { |node| print "#{node.data}, " }
 # puts "\n\n"
 
-arr = []
-i = 0
-10.times do
-  arr << i
-  i += 1
-end
+# arr = []
+# i = 0
+# 10.times do
+#   arr << i
+#   i += 1
+# end
 
-tree = Tree.new(arr)
-tree.pretty_print
+# tree = Tree.new(arr)
+# tree.pretty_print
+# puts "\n\n"
+# tree.insert(11)
+# tree.pretty_print
+# tree.insert(13)
+
+# tree.pretty_print
+# puts "\n\n"
+# tree.pretty_print
+# puts "\n\n"
+# tree.pretty_print
+# puts "\n\n"
+# tree.delete(7)
+# puts "\n\n"
+# tree.pretty_print
+
+tree2 = Tree.new([50, 30, 20, 40, 32, 34, 36, 70, 60, 65, 75, 80, 85])
 puts "\n\n"
-tree.insert(11)
-tree.pretty_print
+tree2.pretty_print
+tree2.delete(36)
+
+puts "\n\n"
+tree2.pretty_print
