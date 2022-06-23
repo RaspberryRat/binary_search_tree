@@ -1,12 +1,7 @@
 require_relative "./node"
-require "pry-byebug"
 
-# don't use duplicate values or check for duplicate values before inserting
-module Comparable
-  # TODO compare nodes using data attributes??
-end
-
-class Tree #should have a root attribute which takes from return value
+# Binary search tree class, creates and navigate a BST
+class Tree
   def initialize(arr)
     @root = build_tree(arr.sort.uniq)
   end
@@ -23,23 +18,26 @@ class Tree #should have a root attribute which takes from return value
     node
   end
 
+  # inserts value into the binary search tree
   def insert(value)
     return "Value '#{value}' already in tree" unless find(value).nil?
 
     previous_node = last_node(value)
-
     return previous_node.left = Node.new(value) if value < previous_node.data
+
     previous_node.right = Node.new(value)
   end
 
+  # deletes a value in binary search tree but unlinkined @right or @left
   def delete(value)
     return "Value '#{value}' not in tree" if find(value).nil?
 
     # returns 0 if a leaf, returns 2, if node has two childs, else returns node
     node = number_of_childs(value)
-    if node == 0
-      delete_leaf(value)
-    elsif node != 2
+    # has to be == 0, #zero? doesnt work
+    return delete_leaf(value) if node == 0
+
+    if node != 2
       parent = find_parent(value)
       return parent.left = node if parent.data > node.data
 
@@ -48,6 +46,7 @@ class Tree #should have a root attribute which takes from return value
       moved_node = find_new_parent(find(value).right)
       update_child_node(moved_node, find(value))
       return @root = moved_node if @root.data == value
+
       parent = find_parent(value)
       parent.left = moved_node if parent.data > moved_node.data
       parent.right = moved_node if parent.data < moved_node.data
@@ -93,33 +92,31 @@ class Tree #should have a root attribute which takes from return value
     return node if value == node.left.data || value == node.right.data
 
     return find_parent(value, node.right) if value > node.data
-    return find_parent(value, node.left)
+
+    find_parent(value, node.left)
   end
 
   def delete_leaf(value, node = @root, prev_node = node)
     if node.data == value
       return prev_node.right = nil if value > prev_node.data
+
       return prev_node.left = nil
     end
 
     return delete_leaf(value, node.right, prev_node = node) if value > node.data
-    return delete_leaf(value, node.left, prev_node = node)
+
+    delete_leaf(value, node.left, prev_node = node)
   end
 
   # determine number of childs of a value, for #delete method
   def number_of_childs(value, node = @root)
     if node.data == value
-      if node.left.nil? && node.right.nil?
-        return 0
-      elsif node.left.nil? && node.right
-        return node.right
-      elsif node.right.nil? && node.left
-        return node.left
-      else
-        return 2
-      end
-    end
+      return 0 if node.left.nil? && node.right.nil?
+      return node.right if node.left.nil? && node.right
+      return node.left if node.right.nil? && node.left
 
+      return 2
+    end
     return number_of_childs(value, node.right) if node.data < value
 
     number_of_childs(value, node.left)
@@ -129,9 +126,9 @@ class Tree #should have a root attribute which takes from return value
   def last_node(value, node = @root, prev_node = node)
     return prev_node if node.nil?
 
-    return last_node(value, node.right, prev_node = node) if node.data < value
+    return last_node(value, node.right, node) if node.data < value
 
-    last_node(value, node.left, prev_node = node)
+    last_node(value, node.left, node)
   end
 
   def find(value, node = @root)
@@ -143,11 +140,12 @@ class Tree #should have a root attribute which takes from return value
       return node if node.data == value
 
       return find(value, node.right) if node.data < value
+
       return find(value, node.left)
     end
   end
 
-  # accepts a block, method should traverse in breadth first lqueuevel order and yield each node to provided block, either iteration or recursion
+  # breath first level order traversal of BST
   def level_order(queue = [@root], &block)
     return if queue.length.zero?
 
@@ -250,39 +248,51 @@ class Tree #should have a root attribute which takes from return value
   end
 end
 
-array = Array.new(15) { rand(1..100) }
+# array = Array.new(15) { rand(1..100) }
 
-tree = Tree.new(array)
+# tree = Tree.new(array)
 
-puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+# puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
 
-print "Binary search tree preorder nodes: "
-tree.preorder { |node| print "#{node.data}, " }
-puts "\n"
-print "Binary search tree inorder nodes: "
-tree.inorder { |node| print "#{node.data}, " }
-puts "\n"
-print "Binary search tree postorder nodes: "
-tree.postorder { |node| print "#{node.data}, " }
-puts "\n\n"
+# print "Binary search tree preorder nodes: "
+# tree.preorder { |node| print "#{node.data}, " }
+# puts "\n"
+# print "Binary search tree inorder nodes: "
+# tree.inorder { |node| print "#{node.data}, " }
+# puts "\n"
+# print "Binary search tree postorder nodes: "
+# tree.postorder { |node| print "#{node.data}, " }
+# puts "\n\n"
 
-tree.insert(1323)
-tree.insert(232)
-tree.insert(123)
-tree.insert(3434)
-tree.insert(199)
+# tree.insert(1323)
+# tree.insert(232)
+# tree.insert(123)
+# tree.insert(3434)
+# tree.insert(199)
+# tree.pretty_print
+# puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+# tree.rebalance
+# tree.pretty_print
+# puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
+# print "Binary search tree preorder nodes: "
+# tree.preorder { |node| print "#{node.data}, " }
+# puts "\n"
+# print "Binary search tree inorder nodes: "
+# tree.inorder { |node| print "#{node.data}, " }
+# puts "\n"
+# print "Binary search tree postorder nodes: "
+# tree.postorder { |node| print "#{node.data}, " }
+# puts "\n\n"
+
+arr = []
+i = 0
+10.times do
+  arr << i
+  i += 1
+end
+
+tree = Tree.new(arr)
 tree.pretty_print
-puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
-tree.rebalance
-tree.pretty_print
-puts "\nBinary search tree balanced?: #{tree.balanced?}\n\n"
-print "Binary search tree preorder nodes: "
-tree.preorder { |node| print "#{node.data}, " }
-puts "\n"
-print "Binary search tree inorder nodes: "
-tree.inorder { |node| print "#{node.data}, " }
-puts "\n"
-print "Binary search tree postorder nodes: "
-tree.postorder { |node| print "#{node.data}, " }
 puts "\n\n"
-
+tree.insert(11)
+tree.pretty_print
