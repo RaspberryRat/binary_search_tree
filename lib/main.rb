@@ -173,26 +173,34 @@ class Tree #should have a root attribute which takes from return value
 
   # prints left node, root, right node in depth-first traversal
   def inorder(node = @root, arr = [], &block)
-    # folow left subtree, until @left is nil, if so, pass block
-    # then check right subtree of root
-    # then return to next root, if @right is nil, pass block on root
     return if node.nil?
 
     inorder(node.left, arr, &block)
-    arr << node.data unless node.nil?
+    arr << node unless node.nil?
     yield(node) if block_given? && !node.nil?
     inorder(node.right, arr, &block)
     arr
   end
+
   # prints left node, right node, root in depth-first traversal
   def postorder(node = @root, arr = [], &block)
-    return node if node.nil?
+    return if node.nil?
 
-    inorder(node.left, arr, &block) unless node.left.nil?
-    inorder(node.right, arr, &block) unless node.right.nil?
+    postorder(node.left, arr, &block)
+    postorder(node.right, arr, &block)
     arr << node unless node.nil?
     yield(node) if block_given? && !node.nil?
     arr
+  end
+
+  # returns number or nodes between value and a leaf node
+  def height(value, count = 0)
+    # find node location of value, follow down until nil reached
+    height_node = find(value)
+
+    
+
+
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -252,5 +260,7 @@ tree.inorder { |node| print "#{node.data}, "}
 
 print "\n\npostorder: "
 tree.postorder { |node| print "#{node.data}, "}
+puts "\n\n"
 
+# print tree.height(2)
 
