@@ -197,7 +197,7 @@ class Tree #should have a root attribute which takes from return value
 
     inorder(node.left, arr, &block) unless node.left.nil?
     arr << node unless node.nil?
-    yield(node) unless node.nil?
+    yield(node) if block_given? && node != nil
     inorder(node.right, arr, &block) unless node.right.nil?
     arr
   end
@@ -260,5 +260,6 @@ tree.preorder { |node| print "#{node.data}, "}
 # puts "\n\n"
 print "\n\ninorder: "
 tree.inorder { |node| print "#{node.data}, "}
+print tree.inorder
 
 
