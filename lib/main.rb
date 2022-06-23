@@ -194,13 +194,13 @@ class Tree #should have a root attribute which takes from return value
   end
 
   # returns number or nodes between value and a leaf node
-  def height(value, count = 0)
-    # find node location of value, follow down until nil reached
-    height_node = find(value)
+  def height(value = @root.data.to_i, node = find(value))
 
-    
+    return if node.nil?
 
-
+    left = height(value, node.left)
+    right = height(value, node.right)
+    left.to_i > right.to_i ? left.to_i + 1 : right.to_i + 1
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -262,5 +262,6 @@ print "\n\npostorder: "
 tree.postorder { |node| print "#{node.data}, "}
 puts "\n\n"
 
-# print tree.height(2)
+print tree.height(8)
+puts "\n\n"
 
