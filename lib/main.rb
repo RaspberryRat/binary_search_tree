@@ -197,13 +197,19 @@ class Tree #should have a root attribute which takes from return value
 
     inorder(node.left, arr, &block) unless node.left.nil?
     arr << node unless node.nil?
-    yield(node) if block_given? && node != nil
+    yield(node) if block_given? && !node.nil?
     inorder(node.right, arr, &block) unless node.right.nil?
     arr
   end
   # prints left node, right node, root in depth-first traversal
-  def postorder
+  def postorder(node = @root, arr = [], &block)
+    return node if node.nil?
 
+    inorder(node.left, arr, &block) unless node.left.nil?
+    inorder(node.right, arr, &block) unless node.right.nil?
+    arr << node unless node.nil?
+    yield(node) if block_given? && !node.nil?
+    arr
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -260,6 +266,8 @@ tree.preorder { |node| print "#{node.data}, "}
 # puts "\n\n"
 print "\n\ninorder: "
 tree.inorder { |node| print "#{node.data}, "}
-print tree.inorder
+
+print "\n\npostorder: "
+tree.postorder { |node| print "#{node.data}, "}
 
 
