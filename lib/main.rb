@@ -177,19 +177,31 @@ class Tree #should have a root attribute which takes from return value
     level_order(queue, &block)
   end
 
+  # prints root, left node, right node in depth-first traversal
   def preorder(node = @root, arr = [], &block)
     return arr if node.nil?
 
     arr << node
     yield(node) if block_given?
-    preorder(node.left, arr, &block)
+    preorder(node.left, arr, &block) unless node.left.nil?
     preorder(node.right, arr, &block)
   end
 
-  def inorder
+  # prints left node, root, right node in depth-first traversal
+  def inorder(node = @root, arr = [], prev_node = node, &block)
+    binding.pry
+    # folow left subtree, until @left is nil, if so, pass block
+    # then check right subtree of root
+    # then return to next root, if @right is nil, pass block on root
+    return node if node.nil?
 
+    inorder(node.left, arr, node, &block) unless node.left.nil?
+    arr << node
+    yield(node)
+    inorder(prev_node.right, arr, &block) unless node.right.nil?
+    arr
   end
-
+  # prints left node, right node, root in depth-first traversal
   def postorder
 
   end
@@ -238,15 +250,15 @@ puts "\n\n"
 # puts "\n\n"
 
 # tree2.pretty_print
-puts "\n\n"
+print "\n\nlevel order: "
 tree.level_order { |node| print "#{node.data}, "}
-puts "\n\n"
+print "\n\npreorder: "
 tree.preorder { |node| print "#{node.data}, "}
-print tree.preorder
 # puts "\n\n"
 # tree2.delete(65)
 # tree2.pretty_print
 # puts "\n\n"
-
+print "\n\ninorder: "
+tree.inorder { |node| print "#{node.data}, "}
 
 
