@@ -202,6 +202,7 @@ class Tree #should have a root attribute which takes from return value
 
   # returns depth of a node
   def depth(value, node = @root, level = 0)
+    return "Value: '#{value}' not in the binary tree" if find(value).nil?
     # start at root, go left or right until find value
     return if node.nil?
 
@@ -276,7 +277,7 @@ height_value = 2
 print "The height of #{height_value} is : #{tree.height(height_value)}"
 puts "\n\n"
 
-depth_value = 3
+depth_value = 9
 print "The depth of #{depth_value} is : #{tree.depth(depth_value)}"
 puts "\n\n"
 
