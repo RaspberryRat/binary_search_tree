@@ -216,16 +216,12 @@ class Tree #should have a root attribute which takes from return value
 
   # checks if tree is balanced (no node is greater than 1 level)
   def balanced?(node = @root)
-    return if node.nil?
-
-    left = balanced?(node.left)
-    right = balanced?(node.right)
-    if left.to_i >= right.to_i + 2 && left.to_i + 2 <= right.to_i
-      "false"
-    else
-      "true"
-    end
-
+    # get height of left tree, and height of right tree
+    left_height = height(node.left.data)
+    right_height = height(node.right.data)
+    difference = left_height - right_height
+    difference *= -1 if difference < 0
+    difference <= 1
   end
 
 
